@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Advanced Digital Clock</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .clock-container {
+      text-align: center;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+
+    .time {
+      font-size: 4rem;
+      font-weight: bold;
+    }
+
+    .date {
+      font-size: 1.5rem;
+      margin-top: 10px;
+    }
+
+    .controls {
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #008cff;
+      color: white;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #006fce;
+    }
+
+    .dark {
+      background-color: #121212;
+      color: #00ffc8;
+    }
+
+    .light {
+      background-color: #f0f0f0;
+      color: #333;
+    }
+  </style>
+</head>
+<body class="dark">
+  <div class="clock-container">
+    <div class="time" id="time">00:00:00</div>
+    <div class="date" id="date">January 1, 2025</div>
+    <div class="controls">
+      <button onclick="toggleFormat()">Toggle 12/24 Hour</button>
+      <button onclick="toggleTheme()">Toggle Theme</button>
+    </div>
+  </div>
+
+  <script>
+    let is24Hour = true;
+    let isDark = true;
+
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+
+      let period = '';
+      if (!is24Hour) {
+        period = hours >= 12 ? ' PM' : ' AM';
+        hours = hours % 12 || 12;
+      }
+
+      const timeString = `${String(hours).padStart(2, '0')}:${minutes}:${seconds}${period}`;
+      document.getElementById('time').textContent = timeString;
+
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const dateString = now.toLocaleDateString(undefined, options);
+      document.getElementById('date').textContent = dateString;
+    }
+
+    function toggleFormat() {
+      is24Hour = !is24Hour;
+    }
+
+    function toggleTheme() {
+      isDark = !isDark;
+      document.body.className = isDark ? 'dark' : 'light';
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>
